@@ -200,6 +200,12 @@ def translate(x, y, z):
 					 0, 1, 0, y,
 					 0, 0, 1, z,
 					 0, 0, 0, 1)
+
+def scale(x, y, z):
+	return Matrix4x4(x, 0, 0, 0,
+					 0, y, 0, 0,
+					 0, 0, z, 0,
+					 0, 0, 0, 1)
 					   
 def printBreak():
 	print ("-------------------")

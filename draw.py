@@ -19,6 +19,7 @@ mesh = None
 
 scaleFactor = 1.05
 rotateFactor = 0.05
+translateFactor = 0.05
 
 # Gets called by glutMainLoop() many times per second
 def doIdle():    
@@ -27,23 +28,33 @@ def doIdle():
 def doKeyboard(*args):
 	global cameraMatrix
 	if args[0] == '+':
-		cameraMatrix.scale(1/scaleFactor)
+		cameraMatrix = cameraMatrix*matrices.scale(1/scaleFactor, 1/scaleFactor, 1/scaleFactor)
 	elif args[0] == '-':
-		cameraMatrix.scale(scaleFactor)
+		cameraMatrix = cameraMatrix*matrices.scale(scaleFactor, scaleFactor, scaleFactor)
 	else:
 		return
 	doRedraw()
 	
 def doSpecial(*args):
 	global cameraMatrix
-	if args[0] == GLUT_KEY_UP:
-		cameraMatrix = cameraMatrix*matrices.rotateX(-rotateFactor) #up
-	if args[0] == GLUT_KEY_DOWN:
-		cameraMatrix = cameraMatrix*matrices.rotateX(rotateFactor) #down
-	if args[0] == GLUT_KEY_LEFT:
-		cameraMatrix = cameraMatrix*matrices.rotateY(-rotateFactor) #left
-	if args[0] == GLUT_KEY_RIGHT:
-		cameraMatrix = matrices.rotateY(rotateFactor)*cameraMatrix #right
+	if glutGetModifiers() & GLUT_ACTIVE_SHIFT:
+		if args[0] == GLUT_KEY_UP:
+			cameraMatrix = matrices.translate(0, -translateFactor, 0)*cameraMatrix #up
+		if args[0] == GLUT_KEY_DOWN:
+			cameraMatrix = matrices.translate(0, translateFactor, 0)*cameraMatrix #down
+		if args[0] == GLUT_KEY_LEFT:
+			cameraMatrix = matrices.translate(translateFactor, 0, 0)*cameraMatrix #left
+		if args[0] == GLUT_KEY_RIGHT:
+			cameraMatrix = matrices.translate(-translateFactor, 0, 0)*cameraMatrix #right
+	else:
+		if args[0] == GLUT_KEY_UP:
+			cameraMatrix = cameraMatrix*matrices.rotateX(-rotateFactor) #up
+		if args[0] == GLUT_KEY_DOWN:
+			cameraMatrix = cameraMatrix*matrices.rotateX(rotateFactor) #down
+		if args[0] == GLUT_KEY_LEFT:
+			cameraMatrix = cameraMatrix*matrices.rotateY(-rotateFactor) #left
+		if args[0] == GLUT_KEY_RIGHT:
+			cameraMatrix = cameraMatrix*matrices.rotateY(rotateFactor) #right
 	doRedraw()
 
 # Called by glutMainLoop() when window is resized
@@ -60,10 +71,11 @@ def doCamera():
 	glMatrixMode(GL_MODELVIEW)
 	glLoadIdentity()
 	
+	orientationMatrix = cameraMatrix.copy()
+	orientationMatrix[3] = matrices.Vector4d(0, 0, 0, 1)
 	pos = matrices.Vector4d(0, 3, 10, 1)*cameraMatrix
 	lookAt = matrices.Vector4d(0, 0, 0, 1)*cameraMatrix
-	direction = matrices.Vector4d(0, 1, 0, 1)*cameraMatrix
-	direction.makeUnit()
+	direction = matrices.Vector4d(0, 1, 0, 1)*orientationMatrix
 
 	gluLookAt(*(pos.list()[:-1] + lookAt.list()[:-1] + direction.list()[:-1]))
 
