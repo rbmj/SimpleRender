@@ -45,7 +45,7 @@ def doSpecial(*args):
 		if args[0] == GLUT_KEY_LEFT:
 			cameraMatrix = cameraMatrix*matrices.translate(translateFactor, 0, 0) #left
 		if args[0] == GLUT_KEY_RIGHT:
-			cameraMatrix = cameraMatrix*matrices.translate(-translateFactor, 0, 0)x #right
+			cameraMatrix = cameraMatrix*matrices.translate(-translateFactor, 0, 0) #right
 	else:
 		if args[0] == GLUT_KEY_UP:
 			cameraMatrix = cameraMatrix*matrices.rotateX(-rotateFactor) #up
