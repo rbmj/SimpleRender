@@ -39,13 +39,13 @@ def doSpecial(*args):
 	global cameraMatrix
 	if glutGetModifiers() & GLUT_ACTIVE_SHIFT:
 		if args[0] == GLUT_KEY_UP:
-			cameraMatrix = matrices.translate(0, -translateFactor, 0)*cameraMatrix #up
+			cameraMatrix = cameraMatrix*matrices.translate(0, -translateFactor, 0) #up
 		if args[0] == GLUT_KEY_DOWN:
-			cameraMatrix = matrices.translate(0, translateFactor, 0)*cameraMatrix #down
+			cameraMatrix = cameraMatrix*matrices.translate(0, translateFactor, 0) #down
 		if args[0] == GLUT_KEY_LEFT:
-			cameraMatrix = matrices.translate(translateFactor, 0, 0)*cameraMatrix #left
+			cameraMatrix = cameraMatrix*matrices.translate(translateFactor, 0, 0) #left
 		if args[0] == GLUT_KEY_RIGHT:
-			cameraMatrix = matrices.translate(-translateFactor, 0, 0)*cameraMatrix #right
+			cameraMatrix = cameraMatrix*matrices.translate(-translateFactor, 0, 0)x #right
 	else:
 		if args[0] == GLUT_KEY_UP:
 			cameraMatrix = cameraMatrix*matrices.rotateX(-rotateFactor) #up
